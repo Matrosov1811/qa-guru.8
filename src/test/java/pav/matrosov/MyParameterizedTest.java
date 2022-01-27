@@ -12,39 +12,39 @@ import java.util.stream.Stream;
 
 public class MyParameterizedTest {
 
-    @ValueSource(strings = {"qa guru"})
+    @ValueSource(strings = {"qa guru", "LABELCOM"})
     @ParameterizedTest(name = "Поиск в ютубе канала {0}")
-    void youTubeTest1 (String testData) {
+    void youTubeValueSourceTest (String testData) {
         Selenide.open("https://www.youtube.com/");
         Selenide.$("input#search").setValue(testData);
         Selenide.$("#search-icon-legacy").click();
-        Selenide.$$("div#info.ytd-channel-renderer").first().shouldHave(Condition.text(testData));
+        Selenide.$("#info.ytd-channel-renderer").shouldHave(Condition.text(testData));
     }
 
     @CsvSource(value = {"qa guru, Подписаться" ,
-    "Тучс, Подписаться"})
+    "LABELCOM, Подписаться"})
     @ParameterizedTest(name = "Поиск в ютубе канала {0} и проверка наличия кнопки {1}")
-    void youTubeTest2 (String testData, String expectedResult) {
+    void youTubeCsvSourceTest (String testData, String expectedResult) {
         Selenide.open("https://www.youtube.com/");
         Selenide.$("input#search").setValue(testData);
         Selenide.$("#search-icon-legacy").click();
-        Selenide.$$("div#subscribe-button.ytd-channel-renderer").first().shouldHave(Condition.text(expectedResult));
+        Selenide.$("#info.ytd-channel-renderer").shouldHave(Condition.text(expectedResult));
     }
 
     static Stream<Arguments> testData() {
         return Stream.of(
                 Arguments.of("qa guru", "Подписаться"),
-                Arguments.of("Тучс", "Подписаться")
+                Arguments.of("LABELCOM", "Подписаться")
         );
     }
 
     @MethodSource("testData")
     @ParameterizedTest(name = "Поиск в ютубе канала {0} и проверка наличия кнопки {1}")
-    void youTubeTest3 (String testData, String expectedResult) {
+    void youTubeMethodSourceTest (String testData, String expectedResult) {
         Selenide.open("https://www.youtube.com/");
         Selenide.$("input#search").setValue(testData);
         Selenide.$("#search-icon-legacy").click();
-        Selenide.$$("div#subscribe-button.ytd-channel-renderer").first().shouldHave(Condition.text(expectedResult));
+        Selenide.$("#info.ytd-channel-renderer").shouldHave(Condition.text(expectedResult));
     }
 
 }
